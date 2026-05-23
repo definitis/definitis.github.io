@@ -250,15 +250,15 @@ export const WEB_PROJECTS: WebProject[] = [
       "Полная адаптивность под любые мобильные и Retina дисплеи"
     ],
     screenshots: [
-      { url: "/src/assets/images/spa_hero_1779553684693.png", label: "01 — Главный экран" },
-      { url: "/src/assets/images/spa_menu_1779553705640.png", label: "02 — Каталог SPA-меню" },
-      { url: "/src/assets/images/spa_details_modal_1779553726698.png", label: "03 — Детали процедуры (Модальное окно)" },
-      { url: "/src/assets/images/spa_calculator_1779553745135.png", label: "04 — Тест-подбор спа-программы" },
-      { url: "/src/assets/images/spa_benefits_1779553762368.png", label: "05 — Почему выбирают нас" },
-      { url: "/src/assets/images/spa_about_1779553780601.png", label: "06 — Философия и атмосфера" },
-      { url: "/src/assets/images/spa_reviews_1779553800297.png", label: "07 — Отзывы гостей" },
-      { url: "/src/assets/images/spa_contacts_1779553816345.png", label: "08 — Контактная информация" },
-      { url: "/src/assets/images/spa_booking_modal_1779553833735.png", label: "09 — Онлайн-запись (Модальное окно)" }
+      { url: "/images/spa_hero_1779553684693.png", label: "01 — Главный экран" },
+      { url: "/images/spa_menu_1779553705640.png", label: "02 — Каталог SPA-меню" },
+      { url: "/images/spa_details_modal_1779553726698.png", label: "03 — Детали процедуры (Модальное окно)" },
+      { url: "/images/spa_calculator_1779553745135.png", label: "04 — Тест-подбор спа-программы" },
+      { url: "/images/spa_benefits_1779553762368.png", label: "05 — Почему выбирают нас" },
+      { url: "/images/spa_about_1779553780601.png", label: "06 — Философия и атмосфера" },
+      { url: "/images/spa_reviews_1779553800297.png", label: "07 — Отзывы гостей" },
+      { url: "/images/spa_contacts_1779553816345.png", label: "08 — Контактная информация" },
+      { url: "/images/spa_booking_modal_1779553833735.png", label: "09 — Онлайн-запись (Модальное окно)" }
     ]
   },
   {
@@ -271,11 +271,11 @@ export const WEB_PROJECTS: WebProject[] = [
     mockupSubtitle: "Онлайн-обучение компьютерной грамотности",
     features: ["Интерактивный просмотр макетов", "Интегрированный презентационный слайдер", "Полноэкранная галерея с детальными скриншотами разделов"],
     screenshots: [
-      { url: "/src/assets/images/techstep_homepage_1779553453577.png", label: "01 — Главная страница" },
-      { url: "/src/assets/images/techstep_directions_1779553472069.png", label: "02 — Направления обучения" },
-      { url: "/src/assets/images/techstep_tariffs_1779553488305.png", label: "03 — Процесс и Тарифы" },
-      { url: "/src/assets/images/techstep_reviews_1779553502758.png", label: "04 — Отзывы студентов" },
-      { url: "/src/assets/images/techstep_contacts_1779553517898.png", label: "05 — Контакты и Быстрая заявка" }
+      { url: "/images/techstep_homepage_1779553453577.png", label: "01 — Главная страница" },
+      { url: "/images/techstep_directions_1779553472069.png", label: "02 — Направления обучения" },
+      { url: "/images/techstep_tariffs_1779553488305.png", label: "03 — Процесс и Тарифы" },
+      { url: "/images/techstep_reviews_1779553502758.png", label: "04 — Отзывы студентов" },
+      { url: "/images/techstep_contacts_1779553517898.png", label: "05 — Контакты и Быстрая заявка" }
     ]
   },
   {
@@ -294,14 +294,14 @@ export const WEB_PROJECTS: WebProject[] = [
       "Форма обратной связи для заказа украшений с душой"
     ],
     screenshots: [
-      { url: "/src/assets/images/jewelry_hero_1779554069252.png", label: "01 — Главный экран" },
-      { url: "/src/assets/images/jewelry_about_1779554084491.png", label: "02 — О бренде и мастере" },
-      { url: "/src/assets/images/jewelry_process_1779554102300.png", label: "03 — Процесс создания" },
-      { url: "/src/assets/images/jewelry_services_1779554117766.png", label: "04 — Услуги и стоимость" },
-      { url: "/src/assets/images/jewelry_gallery_1779554132705.png", label: "05 — Галерея готовых работ" },
-      { url: "/src/assets/images/jewelry_reviews_1779554150765.png", label: "06 — Отзывы гостей" },
-      { url: "/src/assets/images/jewelry_faq_1779554165893.png", label: "07 — Часто задаваемые вопросы" },
-      { url: "/src/assets/images/jewelry_contacts_1779554179842.png", label: "08 — Контакты и Быстрая заявка" }
+      { url: "/images/jewelry_hero_1779554069252.png", label: "01 — Главный экран" },
+      { url: "/images/jewelry_about_1779554084491.png", label: "02 — О бренде и мастере" },
+      { url: "/images/jewelry_process_1779554102300.png", label: "03 — Процесс создания" },
+      { url: "/images/jewelry_services_1779554117766.png", label: "04 — Услуги и стоимость" },
+      { url: "/images/jewelry_gallery_1779554132705.png", label: "05 — Галерея готовых работ" },
+      { url: "/images/jewelry_reviews_1779554150765.png", label: "06 — Отзывы гостей" },
+      { url: "/images/jewelry_faq_1779554165893.png", label: "07 — Часто задаваемые вопросы" },
+      { url: "/images/jewelry_contacts_1779554179842.png", label: "08 — Контакты и Быстрая заявка" }
     ]
   }
 ];

@@ -14,7 +14,10 @@ import {
   ChevronRight,
   Sparkles,
   ArrowUpRight,
-  Briefcase
+  Briefcase,
+  GraduationCap,
+  Trophy,
+  Building2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { GridBackground } from "./components/GridBackground";
@@ -22,7 +25,7 @@ import { Terminal } from "./components/Terminal";
 import { ProjectCard } from "./components/ProjectCard";
 import { ProjectDetailsModal } from "./components/ProjectDetailsModal";
 import { WebPreviewCard } from "./components/WebPreviewCard";
-import { PROJECTS, WEB_PROJECTS, SKILLS_LIST } from "./data";
+import { ACHIEVEMENTS, EXPERIENCE, PROJECTS, WEB_PROJECTS, SKILLS_LIST } from "./data";
 import { Project } from "./types";
 
 export default function App() {
@@ -69,7 +72,7 @@ export default function App() {
             className="cursor-pointer flex items-center gap-2 font-mono text-sm tracking-wider font-bold group"
           >
             <span className="text-indigo-400 font-semibold group-hover:text-indigo-300 transition-colors">&lt;</span>
-            <span className="text-white">DEV_PORTFOLIO</span>
+            <span className="text-white">VIKTOR.TIMUSHEV</span>
             <span className="text-indigo-400 font-semibold group-hover:text-indigo-300 transition-colors">/&gt;</span>
           </button>
 
@@ -79,25 +82,25 @@ export default function App() {
               onClick={() => scrollToSection("hero")} 
               className="cursor-pointer hover:text-white transition-colors"
             >
-              Главная
+              Обо мне
             </button>
             <button 
-              onClick={() => scrollToSection("about")} 
+              onClick={() => scrollToSection("experience")}
               className="cursor-pointer hover:text-white transition-colors"
             >
-              Обо мне
+              Опыт
             </button>
             <button 
               onClick={() => scrollToSection("projects")} 
               className="cursor-pointer hover:text-white transition-colors"
             >
-              Проекты
+              Системы
             </button>
             <button 
-              onClick={() => scrollToSection("websites")} 
+              onClick={() => scrollToSection("education")}
               className="cursor-pointer hover:text-white transition-colors"
             >
-              Веб-разработка
+              Достижения
             </button>
             <button 
               onClick={() => scrollToSection("contact")} 
@@ -135,7 +138,7 @@ export default function App() {
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-xs text-indigo-300 font-mono font-medium self-start mb-6"
             >
               <Sparkles size={12} className="text-indigo-400 shrink-0" />
-              <span>РАЗРАБОТКА И АВТОМАТИЗАЦИЯ СЕРВИСОВ</span>
+              <span>PYTHON • BACKEND • AUTOMATION</span>
             </motion.div>
 
             <motion.h1
@@ -145,7 +148,7 @@ export default function App() {
               className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-none"
             >
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-indigo-400">
-                Python Automation & Backend Developer
+                Python Developer / Software Engineering Intern
               </span>
             </motion.h1>
 
@@ -155,9 +158,8 @@ export default function App() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mt-6 text-base md:text-lg text-zinc-400 leading-relaxed max-w-xl"
             >
-              Разрабатываю автоматизацию, Telegram-ботов, backend-инструменты и системы, 
-              которые заменяют ручную работу и экономят ваше время. Специализируюсь на 
-              отказоустойчивых фоновых процессах и парсинге сложных данных.
+              Студент ИТМО и Python-разработчик с коммерческим опытом в e-commerce, backend и автоматизации.
+              Беру задачу от исследования процесса и данных до работающего решения, проверенного на реальных сценариях.
             </motion.p>
 
             <motion.div
@@ -167,21 +169,20 @@ export default function App() {
               className="mt-8 flex flex-wrap gap-4 items-center"
             >
               <button
-                onClick={() => scrollToSection("projects")}
+                onClick={() => scrollToSection("experience")}
                 className="cursor-pointer px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500 transition-all shadow-lg hover:shadow-indigo-500/10 border border-white/10 flex items-center gap-2"
               >
-                <span>Посмотреть проекты</span>
+                <span>Посмотреть опыт</span>
                 <ChevronRight size={16} />
               </button>
 
               <a
-                href="https://github.com/definitis"
-                target="_blank"
-                rel="noreferrer"
+                href="/resume/"
+                rel="nofollow"
                 className="cursor-pointer px-6 py-3 rounded-xl font-medium bg-white/5 hover:bg-white/10 text-white transition-all border border-white/5 hover:border-white/10 flex items-center gap-2"
               >
-                <Github size={16} />
-                <span>GitHub</span>
+                <Briefcase size={16} />
+                <span>Резюме</span>
               </a>
             </motion.div>
           </div>
@@ -214,17 +215,17 @@ export default function App() {
                 <span>ОБО МНЕ & ФИЛОСОФИЯ</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                Инструменты для освобождения вашего времени
+                От задачи без ТЗ до работающей системы
               </h2>
               <p className="text-base text-zinc-400 leading-relaxed">
-                Специализируюсь на автоматизации процессов, Telegram-ботах, парсинге, 
-                browser automation и backend-разработке. Большая часть моих проектов направлена 
-                на устранение ручной работы, ускорение рутинных процедур и создание автономных систем.
+                Работаю с Python, backend-разработкой, browser automation и Telegram-интеграциями.
+                Сильнее всего интересны системы, в которых нужно разобраться в реальном процессе,
+                спроектировать логику и довести решение до использования.
               </p>
               <p className="text-zinc-400 text-sm md:text-base leading-relaxed">
-                Я не считаю, что всё должно быть сделано вручную. Если процесс можно описать алгоритмом, 
-                он должен работать автономно в облаке или на локальном сервере, освобождая человека от 
-                монотонных кликов по сайтам и ручной сверки файлов Excel.
+                Сейчас ищу internship и junior-возможности в Python Backend, Software Engineering,
+                Automation и AI Engineering. Открыт и к прикладным коммерческим задачам, где автоматизация
+                действительно экономит людям время.
               </p>
 
               {/* Status card */}
@@ -234,8 +235,8 @@ export default function App() {
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                 </span>
                 <div className="text-xs">
-                  <p className="font-semibold text-zinc-200">Открыт для новых проектов</p>
-                  <p className="text-zinc-400 mt-0.5">Разработка ботов, скриптов автоматизации, интеграции с внешними API</p>
+                  <p className="font-semibold text-zinc-200">Открыт для стажировок и прикладных проектов</p>
+                  <p className="text-zinc-400 mt-0.5">Python Backend · Automation · AI Engineering</p>
                 </div>
               </div>
             </div>
@@ -271,6 +272,44 @@ export default function App() {
         </div>
       </section>
 
+      {/* EXPERIENCE SECTION */}
+      <section id="experience" className="py-20 max-w-7xl mx-auto px-4 md:px-8 scroll-mt-20">
+        <div className="mb-12">
+          <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-indigo-400 uppercase mb-3">
+            <Building2 size={14} className="shrink-0" />
+            <span>COMMERCIAL EXPERIENCE</span>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Опыт</h2>
+          <p className="text-sm text-zinc-400 mt-3 max-w-2xl">
+            Коммерческие и project-based задачи, в которых я самостоятельно разбирался в процессах,
+            проектировал логику и доводил решения до рабочего результата.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {EXPERIENCE.map((item) => (
+            <article key={item.company} className="rounded-2xl border border-white/10 bg-[#0E1017]/50 p-6 md:p-8">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 border-b border-white/5 pb-5 mb-5">
+                <div>
+                  <h3 className="text-xl font-semibold text-white">{item.company}</h3>
+                  <p className="text-sm text-indigo-300 mt-1">{item.role}</p>
+                </div>
+                <span className="text-xs font-mono text-zinc-500 whitespace-nowrap">{item.period}</span>
+              </div>
+              <p className="text-sm leading-relaxed text-zinc-400 mb-5">{item.summary}</p>
+              <ul className="space-y-3 text-sm leading-relaxed text-zinc-300">
+                {item.highlights.map((highlight) => (
+                  <li key={highlight} className="flex gap-3">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400" />
+                    <span>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+
       {/* CORE PROJECTS SECTION */}
       <section 
         id="projects" 
@@ -280,13 +319,13 @@ export default function App() {
           <div>
             <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-indigo-400 uppercase mb-3">
               <FolderGit2 size={14} className="shrink-0" />
-              <span>ГЛАВНЫЙ БЛОК ПРОЕКТОВ</span>
+              <span>SELECTED SYSTEMS</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-              Разработанные системы
+              Избранные системы
             </h2>
             <p className="text-xs md:text-sm text-zinc-400 mt-2 max-w-xl">
-              Нажмите на «Технические детали» у любой карточки, чтобы посмотреть углублённую спецификацию архитектуры, интеграций и инфраструктуры.
+              Технические детали показывают архитектуру, интеграции и инфраструктуру использованных в проекте решений.
             </p>
           </div>
 
@@ -341,6 +380,40 @@ export default function App() {
         </motion.div>
       </section>
 
+      {/* EDUCATION AND ACHIEVEMENTS SECTION */}
+      <section id="education" className="py-20 bg-slate-950/20 border-t border-white/5 scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div className="lg:col-span-4">
+            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-indigo-400 uppercase mb-3">
+              <GraduationCap size={14} className="shrink-0" />
+              <span>EDUCATION</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Образование и достижения</h2>
+            <div className="mt-6 rounded-2xl border border-indigo-500/15 bg-indigo-500/[0.03] p-6">
+              <p className="text-lg font-semibold text-white">Университет ИТМО, ФИТиП</p>
+              <p className="mt-2 text-sm text-zinc-300">09.03.02 «Информационные системы и технологии»</p>
+              <p className="mt-1 text-sm text-zinc-400">Разработка программного обеспечения / Software Engineering</p>
+              <p className="mt-4 font-mono text-xs text-indigo-300">2026 - 2030</p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-8 rounded-2xl border border-white/10 bg-[#0E1017]/45 p-6 md:p-8">
+            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-amber-300 uppercase mb-5">
+              <Trophy size={14} className="shrink-0" />
+              <span>OLYMPIADS & ACHIEVEMENTS</span>
+            </div>
+            <ul className="space-y-4 text-sm md:text-base leading-relaxed text-zinc-300">
+              {ACHIEVEMENTS.map((achievement) => (
+                <li key={achievement} className="flex gap-3">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />
+                  <span>{achievement}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* WEBSITES SECTION */}
       <section 
         id="websites" 
@@ -350,13 +423,13 @@ export default function App() {
           <div className="mb-12">
             <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-[#9333EA] uppercase mb-3">
               <Globe size={14} className="shrink-0" />
-              <span>WEB PROJECTS / ФРОНТЕНД</span>
+              <span>WEB CONCEPTS / ФРОНТЕНД</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-               Веб-проекты & Лендинги
+               Веб-концепты и интерфейсы
             </h2>
             <p className="text-zinc-400 text-sm mt-2 max-w-xl">
-              Разработка интерактивных фронтенд-интерфейсов. Ниже представлены прототипы и визуальные демонстрации проектов.
+              Второй фокус портфолио: интерактивные интерфейсы, прототипы и визуальные демонстрации проектов.
             </p>
           </div>
 
@@ -375,15 +448,15 @@ export default function App() {
       >
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs text-emerald-300 font-mono font-medium mb-6">
           <Briefcase size={12} className="text-emerald-400" />
-          <span>ДАВАЙТЕ НАЧНЕМ СОТРУДНИЧЕСТВО</span>
+          <span>OPEN TO INTERNSHIPS & COLLABORATION</span>
         </div>
 
         <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
-          Давайте автоматизируем ваши рутинные процессы
+          Обсудим стажировку или прикладную задачу
         </h2>
         <p className="text-zinc-400 text-base md:text-lg max-w-xl mx-auto mb-12">
-          Напишите мне для обсуждения вашего ТЗ на разработку ботов, скриптов сбора данных, 
-          отказоустойчивых API или интеграции бизнес-систем с Google API / CRM или для других задач.
+          Буду рад предложениям по Python Backend, Software Engineering, Automation и AI Engineering,
+          а также задачам по разработке ботов, интеграций и внутренних инструментов.
         </p>
 
         {/* Elegant Contacts Card grid */}

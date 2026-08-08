@@ -15,33 +15,30 @@ export function Terminal() {
   const [logs, setLogs] = useState<TerminalLog[]>([]);
   const logContainerRef = useRef<HTMLDivElement>(null);
 
-  // Default logs for visabot
+  // Demonstration logs: they illustrate the system's workflow and are not live telemetry.
   const initialBotLogs: TerminalLog[] = [
-    { id: "1", time: "14:17:48", type: "system", text: "Initializing VisaBot daemon v2.4.1..." },
-    { id: "2", time: "14:17:49", type: "info", text: "Loading SQLAlchemy database sqlite:///visabot_prod.db" },
-    { id: "3", time: "14:17:50", type: "info", text: "Initializing headless browser worker pool (size = 3)" },
-    { id: "4", time: "14:17:51", type: "success", text: "Worker #1: Connection established. User Session verified." },
-    { id: "5", time: "14:17:52", type: "success", text: "Worker #2: Telegram Bot API handshake succeeded." },
-    { id: "6", time: "14:17:55", type: "warning", text: "Monitor: IP rotation handler idle. Standby status." },
-    { id: "7", time: "14:18:00", type: "info", text: "Submitting monitor ping: HTTP 200 OK — Next scan in 4.5s" }
+    { id: "1", time: "--:--:--", type: "system", text: "VisaBot architecture preview initialized" },
+    { id: "2", time: "--:--:--", type: "info", text: "Queue, persistence and browser-agent workflow loaded" },
+    { id: "3", time: "--:--:--", type: "info", text: "Browser worker pool configured for independent sessions" },
+    { id: "4", time: "--:--:--", type: "success", text: "Telegram notification flow connected" },
+    { id: "5", time: "--:--:--", type: "success", text: "HTTP fast path enabled for critical workflow steps" },
+    { id: "6", time: "--:--:--", type: "warning", text: "Watchdog and recovery checks are part of the workflow" }
   ];
 
   // Config tab dummy code
   const configCode = `{
-  "agent_credentials": "●●●●●●●●●●●●●●●●",
+  "display_mode": "architecture_preview",
   "worker_pool": {
-    "instances": 3,
-    "headless_mode": true,
-    "user_data_dir": "./profiles"
+    "browser_agents": "isolated",
+    "session_storage": "persistent"
   },
   "scheduler": {
-    "min_interval_seconds": 3.2,
-    "max_interval_seconds": 15.0,
-    "watchdog_timeout_ms": 30000
+    "queue": "enabled",
+    "recovery": "watchdog"
   },
   "notifications": {
-    "telegram_target_id": "902183112",
-    "log_granularity": "INFO"
+    "channel": "Telegram Bot API",
+    "events": "status updates"
   }
 }`;
 
@@ -55,12 +52,12 @@ export function Terminal() {
 
     let idCounter = 8;
     const items = [
-      { type: "info", text: "GET https://api.reservation-portal.eu/slots/status — checked 0 new slots" },
-      { type: "info", text: "Queue check: 0 pending registrations, 3 active sessions" },
-      { type: "success", text: "Heartbeat OK. System Memory load: 24.1%. ThreadPool: Healthy" },
-      { type: "info", text: "Executing garbage collection... chrome profiles state synchronized" },
-      { type: "warning", text: "Portal API rate limit alert: Backing off scan interval by 2.0s" },
-      { type: "info", text: "Scan cycle complete. CPU load: 12.4% / Active chromium threads: 3" }
+      { type: "info", text: "Monitoring cycle: availability state checked" },
+      { type: "info", text: "Queue workflow: pending tasks reviewed" },
+      { type: "success", text: "Recovery monitor: architecture flow ready" },
+      { type: "info", text: "Session state: browser profiles synchronized" },
+      { type: "warning", text: "Rate-limit handling: retry policy available" },
+      { type: "info", text: "Preview cycle complete" }
     ];
 
     const interval = setInterval(() => {
@@ -129,13 +126,13 @@ export function Terminal() {
           </span>
           <div className="flex items-center gap-1.5 ml-4 text-xs font-mono text-zinc-400">
             <TerminalIcon size={12} className="text-zinc-500" />
-            <span>developer@backend-node1:~</span>
+            <span>visabot / architecture-preview</span>
           </div>
         </div>
         <div className="flex items-center gap-2 text-xs">
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-zinc-800/60 border border-zinc-700/40 text-zinc-300 font-mono text-[10px]">
             <Circle size={8} className={`${isRunning ? 'fill-emerald-500 text-emerald-500 animate-pulse' : 'fill-rose-500 text-rose-500'}`} />
-            <span>{isRunning ? "RUNNING" : "STOPPED"}</span>
+            <span>{isRunning ? "DEMO" : "PAUSED"}</span>
           </div>
         </div>
       </div>
@@ -236,27 +233,27 @@ export function Terminal() {
           {activeTab === "monitor" && (
             <div className="space-y-2 text-zinc-400">
               <div className="border border-green-500/10 bg-green-500/[0.02] p-2.5 rounded-lg">
-                <p className="text-emerald-400 font-semibold mb-1 hover:text-emerald-300">SYSTEM HEALTH: EXCELLENT</p>
+                <p className="text-emerald-400 font-semibold mb-1 hover:text-emerald-300">DEMO: RECOVERY & MONITORING</p>
                 <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
-                  <div>CPU Usage: <span className="text-zinc-200">12.4%</span></div>
-                  <div>Active Threads: <span className="text-zinc-200">3/16</span></div>
-                  <div>RAM Allocated: <span className="text-zinc-200">512 MB</span></div>
-                  <div>Zombies checks: <span className="text-zinc-200">0</span></div>
+                  <div>Workers: <span className="text-zinc-200">isolated sessions</span></div>
+                  <div>Queue: <span className="text-zinc-200">orchestrated</span></div>
+                  <div>Recovery: <span className="text-zinc-200">watchdog</span></div>
+                  <div>Updates: <span className="text-zinc-200">Telegram</span></div>
                 </div>
               </div>
               <div className="space-y-1 mt-2 text-zinc-300">
-                <p className="text-zinc-500 text-[10px] select-none"># netstat -tulnp | grep python</p>
-                <div className="text-zinc-400">tcp  0  0 0.0.0.0:3000  0.0.0.0:*  LISTEN  10921/python</div>
-                <p className="text-zinc-500 text-[10px] select-none pt-2"># pm2 status</p>
+                <p className="text-zinc-500 text-[10px] select-none"># workflow overview</p>
+                <div className="text-zinc-400">browser agents → queue → reservation flow → Telegram update</div>
+                <p className="text-zinc-500 text-[10px] select-none pt-2"># project capabilities</p>
                 <div className="grid grid-cols-4 gap-1 text-[10px] text-zinc-400 border-t border-white/5 pt-1">
-                  <span className="text-indigo-400">App Name</span>
-                  <span>status</span>
-                  <span>cpu</span>
-                  <span>mem</span>
-                  <span className="text-zinc-200">visabot</span>
-                  <span className="text-emerald-400">online</span>
-                  <span className="text-zinc-200">1.2%</span>
-                  <span className="text-zinc-200">42.1MB</span>
+                  <span className="text-indigo-400">queue</span>
+                  <span>sessions</span>
+                  <span>recovery</span>
+                  <span>updates</span>
+                  <span className="text-zinc-200">tasks</span>
+                  <span className="text-emerald-400">browser</span>
+                  <span className="text-zinc-200">watchdog</span>
+                  <span className="text-zinc-200">Telegram</span>
                 </div>
               </div>
             </div>

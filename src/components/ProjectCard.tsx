@@ -7,9 +7,10 @@ interface ProjectCardProps {
   key?: React.Key;
   project: Project;
   onOpenDetails: (project: Project) => void;
+  isMuted?: boolean;
 }
 
-export function ProjectCard({ project, onOpenDetails }: ProjectCardProps) {
+export function ProjectCard({ project, onOpenDetails, isMuted = false }: ProjectCardProps) {
   const isFeatured = project.id === "visabot";
 
   // Dynamic status badges
@@ -30,12 +31,11 @@ export function ProjectCard({ project, onOpenDetails }: ProjectCardProps) {
 
   return (
     <motion.div
-      layout
       id={`project-card-${project.id}`}
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
       onClick={() => onOpenDetails(project)}
-      className={`group relative rounded-xl border border-white/10 bg-slate-950/40 backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/5 cursor-pointer select-none ${
+      className={`group relative rounded-xl border border-white/10 bg-slate-950/40 backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/5 cursor-pointer select-none ${isMuted ? "opacity-35 hover:opacity-80 saturate-50" : ""} ${
         isFeatured ? "md:col-span-2" : ""
       }`}
     >

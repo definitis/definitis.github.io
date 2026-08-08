@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { 
   Terminal as TerminalIcon, 
   User, 
@@ -19,7 +19,7 @@ import {
   Trophy,
   Building2
 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { GridBackground } from "./components/GridBackground";
 import { Terminal } from "./components/Terminal";
 import { ProjectCard } from "./components/ProjectCard";
@@ -31,6 +31,7 @@ import { Project } from "./types";
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<"all" | "automation" | "backend" | "tool">("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const filterScrollPosition = useRef<number | null>(null);
   
   // Contacts clipboard states
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -49,9 +50,7 @@ export default function App() {
   };
 
   // Filtering projects
-  const filteredProjects = selectedCategory === "all" 
-    ? PROJECTS 
-    : PROJECTS.filter(p => p.category === selectedCategory);
+  const displayedProjects = PROJECTS;
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -59,6 +58,18 @@ export default function App() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const changeCategory = (category: "all" | "automation" | "backend" | "tool") => {
+    filterScrollPosition.current = window.scrollY;
+    setSelectedCategory(category);
+  };
+
+  useLayoutEffect(() => {
+    if (filterScrollPosition.current === null) return;
+
+    window.scrollTo({ top: filterScrollPosition.current, behavior: "auto" });
+    filterScrollPosition.current = null;
+  }, [selectedCategory]);
 
   return (
     <div className="min-h-screen text-zinc-100 font-sans relative selection:bg-indigo-500/30 selection:text-white pb-12">
@@ -94,7 +105,7 @@ export default function App() {
               onClick={() => scrollToSection("projects")} 
               className="cursor-pointer hover:text-white transition-colors"
             >
-              Системы
+              Проекты
             </button>
             <button 
               onClick={() => scrollToSection("education")}
@@ -212,13 +223,13 @@ export default function App() {
             <div className="lg:col-span-6 space-y-6">
               <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-indigo-400 uppercase">
                 <User size={14} className="shrink-0" />
-                <span>ОБО МНЕ & ФИЛОСОФИЯ</span>
+                <span>ОБО МНЕ</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
                 От задачи без ТЗ до работающей системы
               </h2>
               <p className="text-base text-zinc-400 leading-relaxed">
-                Работаю с Python, backend-разработкой, browser automation и Telegram-интеграциями.
+                Работаю с Python, backend-разработкой и browser automation.
                 Сильнее всего интересны системы, в которых нужно разобраться в реальном процессе,
                 спроектировать логику и довести решение до использования.
               </p>
@@ -319,10 +330,10 @@ export default function App() {
           <div>
             <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-indigo-400 uppercase mb-3">
               <FolderGit2 size={14} className="shrink-0" />
-              <span>SELECTED SYSTEMS</span>
+              <span>SELECTED PROJECTS</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-              Избранные системы
+              Проекты
             </h2>
             <p className="text-xs md:text-sm text-zinc-400 mt-2 max-w-xl">
               Технические детали показывают архитектуру, интеграции и инфраструктуру использованных в проекте решений.
@@ -332,7 +343,7 @@ export default function App() {
           {/* Category Filter Tabs */}
           <div className="flex items-center gap-1.5 bg-white/5 p-1 rounded-xl self-start">
             <button
-              onClick={() => setSelectedCategory("all")}
+              onClick={() => changeCategory("all")}
               className={`cursor-pointer px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all ${
                 selectedCategory === "all" ? "bg-indigo-600 text-white font-medium" : "text-zinc-400 hover:text-zinc-200"
               }`}
@@ -340,7 +351,7 @@ export default function App() {
               Все
             </button>
             <button
-              onClick={() => setSelectedCategory("automation")}
+              onClick={() => changeCategory("automation")}
               className={`cursor-pointer px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all ${
                 selectedCategory === "automation" ? "bg-indigo-600 text-white font-medium" : "text-zinc-400 hover:text-zinc-200"
               }`}
@@ -348,7 +359,7 @@ export default function App() {
               Автоматизация
             </button>
             <button
-              onClick={() => setSelectedCategory("backend")}
+              onClick={() => changeCategory("backend")}
               className={`cursor-pointer px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all ${
                 selectedCategory === "backend" ? "bg-indigo-600 text-white font-medium" : "text-zinc-400 hover:text-zinc-200"
               }`}
@@ -356,7 +367,7 @@ export default function App() {
               Бэкенд
             </button>
             <button
-              onClick={() => setSelectedCategory("tool")}
+              onClick={() => changeCategory("tool")}
               className={`cursor-pointer px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all ${
                 selectedCategory === "tool" ? "bg-indigo-600 text-white font-medium" : "text-zinc-400 hover:text-zinc-200"
               }`}
@@ -367,17 +378,16 @@ export default function App() {
         </div>
 
         {/* Dynamic Project Grid */}
-        <motion.div layout="position" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8">
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project) => (
-              <ProjectCard 
-                key={project.id} 
-                project={project} 
-                onOpenDetails={setSelectedProject}
-              />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 [overflow-anchor:none]">
+          {displayedProjects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onOpenDetails={setSelectedProject}
+              isMuted={selectedCategory !== "all" && project.category !== selectedCategory}
+            />
+          ))}
+        </div>
       </section>
 
       {/* EDUCATION AND ACHIEVEMENTS SECTION */}

@@ -1,36 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { ArrowLeft, Download, Github, Mail, Send } from "lucide-react";
+import { ACHIEVEMENTS, EXPERIENCE, SKILLS_LIST } from "./data";
 import "./index.css";
-
-const experience = [
-  {
-    company: "Лепороша",
-    role: "Python Developer / Business Automation",
-    period: "июль - август 2026",
-    points: [
-      "Самостоятельно спроектировал FIFO-алгоритм для движения товарных партий по данным Wildberries и проверил его на реальных данных.",
-      "Разработал Telegram-систему учета кодов «Честный знак» и отчетность в Google Sheets.",
-      "Собрал plan/fact-витрину «вымывания» товарных партий; рабочий вариант был принят руководителем."
-    ]
-  },
-  {
-    company: "Открытая Европа",
-    role: "Python Developer, project-based",
-    period: "июнь 2025 - настоящее время",
-    points: [
-      "Основной разработчик VisaBot: до шести браузерных агентов, очередь, БД, orchestration, recovery/watchdog и Telegram-управление.",
-      "Оптимизировал критичную часть workflow через прямые HTTP-запросы: с минут до нескольких секунд.",
-      "Разрабатываю prototype для автоматизации 3-НДФЛ: FastAPI + Telegram, обработка документов/OCR, rules engine, XML ФНС/XSD и PDF-preview."
-    ]
-  }
-];
-
-const achievements = [
-  "Призер олимпиады им. И.Я. Верченко по математике и криптографии, II уровень, 2025/2026.",
-  "Призер «Росатома» по информатике, II уровень, 2025/2026.",
-  "Победитель ТИИМ по информатике, 2026.",
-  "Диплом III степени командного турнира ФКН НИУ ВШЭ + Яндекс, 2025."
-];
 
 function ResumePage() {
   return (
@@ -91,7 +62,7 @@ function ResumePage() {
 
               <section className="mt-8">
                 <h2 className="font-mono text-xs font-semibold tracking-[0.18em] text-indigo-300">ТЕХНОЛОГИИ</h2>
-                <p className="mt-4 text-sm leading-relaxed text-zinc-300">Python, FastAPI, Pydantic, SQLAlchemy, Alembic, SQLite, SQL, REST/HTTP, Selenium, Playwright, Telegram Bot API, pandas, Google Sheets API, OpenAI API, Gemini API, pytest, Git, Linux/SSH.</p>
+                <p className="mt-4 text-sm leading-relaxed text-zinc-300">{SKILLS_LIST.join(", ")}.</p>
               </section>
             </aside>
 
@@ -99,14 +70,14 @@ function ResumePage() {
               <section>
                 <h2 className="font-mono text-xs font-semibold tracking-[0.18em] text-indigo-300">ОПЫТ</h2>
                 <div className="mt-5 space-y-8">
-                  {experience.map((item) => (
+                  {EXPERIENCE.map((item) => (
                     <article key={item.company}>
                       <div className="flex flex-col gap-1 border-b border-white/10 pb-3 sm:flex-row sm:items-baseline sm:justify-between">
                         <h3 className="text-lg font-semibold text-white">{item.company} <span className="font-normal text-zinc-400">| {item.role}</span></h3>
                         <span className="font-mono text-xs text-zinc-500">{item.period}</span>
                       </div>
                       <ul className="mt-4 space-y-2 text-sm leading-relaxed text-zinc-300">
-                        {item.points.map((point) => <li key={point} className="flex gap-3"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400" />{point}</li>)}
+                        {item.highlights.map((point) => <li key={point} className="flex gap-3"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400" />{point}</li>)}
                       </ul>
                     </article>
                   ))}
@@ -125,7 +96,7 @@ function ResumePage() {
               <section>
                 <h2 className="font-mono text-xs font-semibold tracking-[0.18em] text-indigo-300">ОЛИМПИАДЫ И ДОСТИЖЕНИЯ</h2>
                 <ul className="mt-5 space-y-2 text-sm leading-relaxed text-zinc-300">
-                  {achievements.map((achievement) => <li key={achievement} className="flex gap-3"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />{achievement}</li>)}
+                  {ACHIEVEMENTS.map((achievement) => <li key={achievement} className="flex gap-3"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />{achievement}</li>)}
                 </ul>
               </section>
             </div>

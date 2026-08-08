@@ -87,7 +87,7 @@ function ResumePage() {
               <section>
                 <h2 className="font-mono text-xs font-semibold tracking-[0.18em] text-indigo-300">ИЗБРАННЫЕ ПРОЕКТЫ</h2>
                 <div className="mt-5 grid gap-4 md:grid-cols-3">
-                  <div className="rounded-xl border border-white/10 bg-black/15 p-4"><h3 className="font-semibold text-white">AI/SEO Automation</h3><p className="mt-2 text-sm leading-relaxed text-zinc-400">LLM-workflow для e-commerce; тестовая неделя привела к офферу в «Лепороше».</p></div>
+                  <div className="rounded-xl border border-white/10 bg-black/15 p-4"><h3 className="font-semibold text-white">AI/SEO Automation</h3><p className="mt-2 text-sm leading-relaxed text-zinc-400">LLM-workflow для e-commerce: анализ карточки товара, подбор ключей и подготовка SEO-описания.</p></div>
                   <div className="rounded-xl border border-white/10 bg-black/15 p-4"><h3 className="font-semibold text-white">WB Social Autoposter</h3><p className="mt-2 text-sm leading-relaxed text-zinc-400">Пайплайн публикаций в VK, Pinterest и Instagram с browser automation.</p></div>
                   <div className="rounded-xl border border-white/10 bg-black/15 p-4"><h3 className="font-semibold text-white">Reporting Automation</h3><p className="mt-2 text-sm leading-relaxed text-zinc-400">Сбор просроченных заданий и синхронизация с Google Sheets; экономит около 20 минут в день.</p></div>
                 </div>

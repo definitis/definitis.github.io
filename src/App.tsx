@@ -17,9 +17,11 @@ import {
   Briefcase,
   GraduationCap,
   Trophy,
-  Building2
+  Building2,
+  Menu,
+  X
 } from "lucide-react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { GridBackground } from "./components/GridBackground";
 import { Terminal } from "./components/Terminal";
 import { ProjectCard } from "./components/ProjectCard";
@@ -31,7 +33,10 @@ import { Project } from "./types";
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<"all" | "automation" | "backend" | "tool">("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const filterScrollPosition = useRef<number | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const filterControlsRef = useRef<HTMLDivElement>(null);
+  const filterControlsTop = useRef<number | null>(null);
+  const swipeStart = useRef<{ x: number; y: number } | null>(null);
   
   // Contacts clipboard states
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -50,7 +55,9 @@ export default function App() {
   };
 
   // Filtering projects
-  const displayedProjects = PROJECTS;
+  const displayedProjects = selectedCategory === "all"
+    ? PROJECTS
+    : PROJECTS.filter((project) => project.category === selectedCategory);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -60,32 +67,127 @@ export default function App() {
   };
 
   const changeCategory = (category: "all" | "automation" | "backend" | "tool") => {
-    filterScrollPosition.current = window.scrollY;
+    filterControlsTop.current = filterControlsRef.current?.getBoundingClientRect().top ?? null;
     setSelectedCategory(category);
   };
 
   useLayoutEffect(() => {
-    if (filterScrollPosition.current === null) return;
+    if (filterControlsTop.current === null) return;
 
-    window.scrollTo({ top: filterScrollPosition.current, behavior: "auto" });
-    filterScrollPosition.current = null;
+    const nextTop = filterControlsRef.current?.getBoundingClientRect().top;
+    if (nextTop !== undefined) {
+      window.scrollBy({ top: nextTop - filterControlsTop.current, behavior: "auto" });
+    }
+    filterControlsTop.current = null;
   }, [selectedCategory]);
 
+  const navigateFromMobileMenu = (id: string) => {
+    setIsMobileMenuOpen(false);
+    window.setTimeout(() => scrollToSection(id), 120);
+  };
+
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    swipeStart.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (!swipeStart.current) return;
+
+    const touch = event.changedTouches[0];
+    const horizontalDistance = touch.clientX - swipeStart.current.x;
+    const verticalDistance = touch.clientY - swipeStart.current.y;
+
+    if (Math.abs(horizontalDistance) > 70 && Math.abs(horizontalDistance) > Math.abs(verticalDistance)) {
+      setIsMobileMenuOpen(horizontalDistance > 0);
+    }
+
+    swipeStart.current = null;
+  };
+
   return (
-    <div className="min-h-screen text-zinc-100 font-sans relative selection:bg-indigo-500/30 selection:text-white pb-12">
+    <div
+      className="min-h-screen text-zinc-100 font-sans relative selection:bg-indigo-500/30 selection:text-white pb-12"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <GridBackground />
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <motion.button
+              type="button"
+              aria-label="Закрыть меню"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            />
+            <motion.aside
+              initial={{ x: -320 }}
+              animate={{ x: 0 }}
+              exit={{ x: -320 }}
+              transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
+              className="relative flex h-full w-[min(82vw,320px)] flex-col border-r border-white/10 bg-[#0A0B10] px-6 py-6 shadow-2xl"
+            >
+              <div className="flex items-center justify-between border-b border-white/10 pb-5">
+                <span className="font-mono text-xs tracking-[0.2em] text-indigo-300">НАВИГАЦИЯ</span>
+                <button
+                  type="button"
+                  aria-label="Закрыть меню"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="cursor-pointer p-1 text-zinc-400 transition-colors hover:text-white"
+                >
+                  <X size={21} />
+                </button>
+              </div>
+              <nav className="mt-6 flex flex-col gap-1">
+                {[
+                  ["Обо мне", "hero"],
+                  ["Опыт", "experience"],
+                  ["Проекты", "projects"],
+                  ["Достижения", "education"],
+                  ["Веб-концепты", "websites"],
+                  ["Контакты", "contact"]
+                ].map(([label, id]) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => navigateFromMobileMenu(id)}
+                    className="cursor-pointer rounded-lg px-3 py-3 text-left font-mono text-sm text-zinc-300 transition-colors hover:bg-indigo-500/10 hover:text-white"
+                  >
+                    {label}
+                  </button>
+                ))}
+              </nav>
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* FIXED FLOATING NAVBAR */}
       <header className="fixed top-0 left-0 right-0 z-40 bg-[#0A0B10]/70 backdrop-blur-md border-b border-white/5 transition-all">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
-          <button 
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="cursor-pointer flex items-center gap-2 font-mono text-sm tracking-wider font-bold group"
-          >
-            <span className="text-indigo-400 font-semibold group-hover:text-indigo-300 transition-colors">&lt;</span>
-            <span className="text-white">VIKTOR.TIMUSHEV</span>
-            <span className="text-indigo-400 font-semibold group-hover:text-indigo-300 transition-colors">/&gt;</span>
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              aria-label="Открыть навигацию"
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="-ml-2 cursor-pointer p-2 text-zinc-300 transition-colors hover:text-white md:hidden"
+            >
+              <Menu size={20} />
+            </button>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="cursor-pointer flex items-center gap-1.5 font-mono text-xs sm:text-sm tracking-wider font-bold group"
+            >
+              <span className="text-indigo-400 font-semibold group-hover:text-indigo-300 transition-colors">&lt;</span>
+              <span className="text-white">VIKTOR.TIMUSHEV</span>
+              <span className="text-indigo-400 font-semibold group-hover:text-indigo-300 transition-colors">/&gt;</span>
+            </button>
+          </div>
 
           {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
@@ -136,7 +238,7 @@ export default function App() {
       {/* HERO SECTION */}
       <section 
         id="hero" 
-        className="pt-28 md:pt-40 pb-16 min-h-[90vh] flex items-center max-w-7xl mx-auto px-4 md:px-8"
+        className="pt-28 md:pt-40 pb-16 min-h-0 md:min-h-[90vh] flex items-center max-w-7xl mx-auto px-4 md:px-8"
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
           
@@ -203,7 +305,7 @@ export default function App() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-5 w-full flex justify-center"
+            className="hidden lg:col-span-5 lg:flex w-full justify-center"
           >
             <Terminal />
           </motion.div>
@@ -341,7 +443,7 @@ export default function App() {
           </div>
 
           {/* Category Filter Tabs */}
-          <div className="flex items-center gap-1.5 bg-white/5 p-1 rounded-xl self-start">
+          <div ref={filterControlsRef} className="flex items-center gap-1.5 bg-white/5 p-1 rounded-xl self-start">
             <button
               onClick={() => changeCategory("all")}
               className={`cursor-pointer px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all ${
@@ -384,7 +486,6 @@ export default function App() {
               key={project.id}
               project={project}
               onOpenDetails={setSelectedProject}
-              isMuted={selectedCategory !== "all" && project.category !== selectedCategory}
             />
           ))}
         </div>

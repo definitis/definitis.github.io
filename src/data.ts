@@ -127,7 +127,6 @@ export const PROJECTS: Project[] = [
     stack: ["Python", "LLM API", "Automation", "E-commerce"],
     status: "Completed",
     isPrivate: true,
-    result: "Результат тестовой недели привел к офферу в «Лепороше».",
     features: [
       "Анализ изображения товара и классификация одежды",
       "Выбор релевантных ключей из внутренних конструкторов",

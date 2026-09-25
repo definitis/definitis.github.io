@@ -9,3 +9,4 @@ luxury-store-prototype/
 *.log
 .env*
 !.env.example
+*.zip

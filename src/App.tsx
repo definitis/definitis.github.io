@@ -62,7 +62,6 @@ export default function App() {
                 secondarySrc="/images/avatar-real.png"
                 alt="Виктор Тимушев"
                 className="w-24 h-24 sm:w-36 sm:h-36 rounded-full border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors"
-                gridSize={7}
                 duration={330}
               />
               <div className="flex flex-col gap-1.5 sm:gap-2">

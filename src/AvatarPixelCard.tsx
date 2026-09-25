@@ -5,7 +5,6 @@ interface AvatarPixelCardProps {
   secondarySrc: string;
   alt: string;
   className?: string;
-  gridSize?: number;
   duration?: number; // duration of one phase in ms
 }
 
@@ -14,30 +13,48 @@ export function AvatarPixelCard({
   secondarySrc,
   alt,
   className = "w-24 h-24 sm:w-36 sm:h-36 rounded-full",
-  gridSize = 7,
-  duration = 320,
+  duration = 330,
 }: AvatarPixelCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [showSecondary, setShowSecondary] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const bigSquaresRef = useRef<HTMLDivElement[]>([]);
   const pixelsRef = useRef<HTMLDivElement[]>([]);
   const animFrameRef = useRef<number | null>(null);
   const isTouchRef = useRef(false);
 
-  const totalCells = gridSize * gridSize;
+  const BIG_GRID = 4; // 4x4 big squares
+  const SMALL_PER_BIG = 2; // 2x2 small squares inside each big square
+  const TOTAL_SMALL = (BIG_GRID * SMALL_PER_BIG) * (BIG_GRID * SMALL_PER_BIG); // 64 small squares
 
-  // Initialize pixels array (7x7 grid for larger, distinct mosaic tiles)
-  const pixelCells = [];
-  const cellSize = 100 / gridSize;
-  for (let r = 0; r < gridSize; r++) {
-    for (let c = 0; c < gridSize; c++) {
-      pixelCells.push({
-        id: `${r}-${c}`,
-        top: `${r * cellSize}%`,
-        left: `${c * cellSize}%`,
-        width: `${cellSize}%`,
-        height: `${cellSize}%`,
+  // Build 4x4 big squares, each holding 4 small squares of the same size as current (12.5%)
+  const bigSquares = [];
+  let pixelIndex = 0;
+
+  for (let br = 0; br < BIG_GRID; br++) {
+    for (let bc = 0; bc < BIG_GRID; bc++) {
+      const bigIdx = br * BIG_GRID + bc;
+      const smallSquares = [];
+
+      for (let sr = 0; sr < SMALL_PER_BIG; sr++) {
+        for (let sc = 0; sc < SMALL_PER_BIG; sc++) {
+          smallSquares.push({
+            idx: pixelIndex++,
+            top: `${sr * 50}%`,
+            left: `${sc * 50}%`,
+          });
+        }
+      }
+
+      bigSquares.push({
+        id: `big-${br}-${bc}`,
+        bigIdx,
+        top: `${br * 25}%`,
+        left: `${bc * 25}%`,
+        isTop: br === 0,
+        isLeft: bc === 0,
+        smallSquares,
       });
     }
   }
@@ -52,14 +69,30 @@ export function AvatarPixelCard({
     return a;
   }, []);
 
+  // Update big squares border visibility only when at least one small square inside is shown
+  const updateBigSquaresVisibility = () => {
+    for (let b = 0; b < 16; b++) {
+      const b0 = b * 4;
+      const hasVisible =
+        pixelsRef.current[b0]?.style.display === "block" ||
+        pixelsRef.current[b0 + 1]?.style.display === "block" ||
+        pixelsRef.current[b0 + 2]?.style.display === "block" ||
+        pixelsRef.current[b0 + 3]?.style.display === "block";
+
+      if (bigSquaresRef.current[b]) {
+        bigSquaresRef.current[b].style.display = hasVisible ? "block" : "none";
+      }
+    }
+  };
+
   // Run mosaic transition
   const triggerTransition = useCallback((toSecondary: boolean) => {
     if (animFrameRef.current) {
       cancelAnimationFrame(animFrameRef.current);
     }
 
-    const order1 = shuffleArray([...Array(totalCells).keys()]);
-    const order2 = shuffleArray([...Array(totalCells).keys()]);
+    const order1 = shuffleArray([...Array(TOTAL_SMALL).keys()]);
+    const order2 = shuffleArray([...Array(TOTAL_SMALL).keys()]);
     const phaseDuration = duration;
     const startTime = performance.now();
 
@@ -67,31 +100,38 @@ export function AvatarPixelCard({
       const elapsed = now - startTime;
 
       if (elapsed < phaseDuration) {
-        // Phase 1: Random pixels appear, covering old photo
+        // Phase 1: Random small pixels appear, covering old photo
         const progress = elapsed / phaseDuration;
-        const count = Math.min(totalCells, Math.floor(progress * totalCells));
-        for (let i = 0; i < totalCells; i++) {
+        const count = Math.min(TOTAL_SMALL, Math.floor(progress * TOTAL_SMALL));
+        for (let i = 0; i < TOTAL_SMALL; i++) {
           const el = pixelsRef.current[order1[i]];
           if (el) el.style.display = i < count ? "block" : "none";
         }
+        updateBigSquaresVisibility();
         animFrameRef.current = requestAnimationFrame(step);
       } else if (elapsed < phaseDuration * 2) {
         // Midpoint: switch image
         setShowSecondary(toSecondary);
 
-        // Phase 2: Random pixels disappear, revealing new photo
+        // Phase 2: Random small pixels disappear, revealing new photo
         const progress2 = (elapsed - phaseDuration) / phaseDuration;
-        const hideCount = Math.min(totalCells, Math.floor(progress2 * totalCells));
-        for (let i = 0; i < totalCells; i++) {
+        const hideCount = Math.min(TOTAL_SMALL, Math.floor(progress2 * TOTAL_SMALL));
+        for (let i = 0; i < TOTAL_SMALL; i++) {
           const el = pixelsRef.current[order2[i]];
           if (el) el.style.display = i < hideCount ? "none" : "block";
         }
+        updateBigSquaresVisibility();
         animFrameRef.current = requestAnimationFrame(step);
       } else {
         // Complete
-        for (let i = 0; i < totalCells; i++) {
+        for (let i = 0; i < TOTAL_SMALL; i++) {
           const el = pixelsRef.current[i];
           if (el) el.style.display = "none";
+        }
+        for (let b = 0; b < 16; b++) {
+          if (bigSquaresRef.current[b]) {
+            bigSquaresRef.current[b].style.display = "none";
+          }
         }
         setShowSecondary(toSecondary);
         animFrameRef.current = null;
@@ -99,7 +139,7 @@ export function AvatarPixelCard({
     }
 
     animFrameRef.current = requestAnimationFrame(step);
-  }, [duration, shuffleArray, totalCells]);
+  }, [duration, shuffleArray, TOTAL_SMALL]);
 
   // Handle hover on desktop
   const handleMouseEnter = () => {
@@ -165,7 +205,7 @@ export function AvatarPixelCard({
         loading="eager"
       />
 
-      {/* Secondary (Real Photo) Image - zoomed out slightly from the initial variant so more context is visible */}
+      {/* Secondary (Real Photo) Image */}
       <img
         src={secondarySrc}
         alt={alt}
@@ -175,23 +215,42 @@ export function AvatarPixelCard({
         loading="eager"
       />
 
-      {/* Pixel mosaic overlay layer: white tiles with faint, delicate hairline border matching reference */}
+      {/* Pixel mosaic overlay: 4x4 big squares with delicate black borders, each containing 2x2 white small squares */}
       <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
-        {pixelCells.map((cell, idx) => (
+        {bigSquares.map((big) => (
           <div
-            key={cell.id}
+            key={big.id}
             ref={(el) => {
-              if (el) pixelsRef.current[idx] = el;
+              if (el) bigSquaresRef.current[big.bigIdx] = el;
             }}
             style={{
-              top: cell.top,
-              left: cell.left,
-              width: cell.width,
-              height: cell.height,
+              top: big.top,
+              left: big.left,
+              width: "25%",
+              height: "25%",
               display: "none",
             }}
-            className="absolute bg-white border-[0.5px] border-black/25 box-border"
-          />
+            className={`absolute border-r-[0.5px] border-b-[0.5px] border-black/35 box-border ${
+              big.isTop ? "border-t-[0.5px]" : ""
+            } ${big.isLeft ? "border-l-[0.5px]" : ""}`}
+          >
+            {big.smallSquares.map((small) => (
+              <div
+                key={small.idx}
+                ref={(el) => {
+                  if (el) pixelsRef.current[small.idx] = el;
+                }}
+                style={{
+                  top: small.top,
+                  left: small.left,
+                  width: "50%",
+                  height: "50%",
+                  display: "none",
+                }}
+                className="absolute bg-white box-border"
+              />
+            ))}
+          </div>
         ))}
       </div>
     </div>

@@ -3,6 +3,8 @@ build/
 dist/
 coverage/
 .playwright-mcp/
+.playwright-cli/
+luxury-store-prototype/
 .DS_Store
 *.log
 .env*

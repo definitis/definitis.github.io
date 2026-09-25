@@ -14,8 +14,12 @@ export default defineConfig(() => {
     build: {
       rollupOptions: {
         input: {
-          main: path.resolve(__dirname, "index.html"),
-          resume: path.resolve(__dirname, "resume/index.html"),
+          main: "index.html",
+          resume: "resume/index.html",
+          projects: "projects/index.html",
+          experience: "experience/index.html",
+          education: "education/index.html",
+          technologies: "technologies/index.html",
         },
       },
     },
@@ -26,5 +30,8 @@ export default defineConfig(() => {
       // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
+    optimizeDeps: {
+      noDiscovery: true
+    }
   };
 });

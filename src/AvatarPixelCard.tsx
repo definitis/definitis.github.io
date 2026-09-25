@@ -5,6 +5,7 @@ interface AvatarPixelCardProps {
   secondarySrc: string;
   alt: string;
   className?: string;
+  bigGridSize?: number; // number of big squares across (default 6)
   duration?: number; // duration of one phase in ms
 }
 
@@ -13,7 +14,8 @@ export function AvatarPixelCard({
   secondarySrc,
   alt,
   className = "w-24 h-24 sm:w-36 sm:h-36 rounded-full",
-  duration = 330,
+  bigGridSize = 6,
+  duration = 320,
 }: AvatarPixelCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [showSecondary, setShowSecondary] = useState(false);
@@ -24,11 +26,13 @@ export function AvatarPixelCard({
   const animFrameRef = useRef<number | null>(null);
   const isTouchRef = useRef(false);
 
-  const BIG_GRID = 4; // 4x4 big squares
+  const BIG_GRID = bigGridSize; // 6x6 big squares
+  const TOTAL_BIG = BIG_GRID * BIG_GRID; // 36 big squares
   const SMALL_PER_BIG = 2; // 2x2 small squares inside each big square
-  const TOTAL_SMALL = (BIG_GRID * SMALL_PER_BIG) * (BIG_GRID * SMALL_PER_BIG); // 64 small squares
+  const TOTAL_SMALL = TOTAL_BIG * 4; // 144 small squares
+  const bigCellSize = 100 / BIG_GRID;
 
-  // Build 4x4 big squares, each holding 4 small squares of the same size as current (12.5%)
+  // Build big squares, each holding 4 small squares
   const bigSquares = [];
   let pixelIndex = 0;
 
@@ -50,8 +54,8 @@ export function AvatarPixelCard({
       bigSquares.push({
         id: `big-${br}-${bc}`,
         bigIdx,
-        top: `${br * 25}%`,
-        left: `${bc * 25}%`,
+        top: `${br * bigCellSize}%`,
+        left: `${bc * bigCellSize}%`,
         isTop: br === 0,
         isLeft: bc === 0,
         smallSquares,
@@ -71,7 +75,7 @@ export function AvatarPixelCard({
 
   // Update big squares border visibility only when at least one small square inside is shown
   const updateBigSquaresVisibility = () => {
-    for (let b = 0; b < 16; b++) {
+    for (let b = 0; b < TOTAL_BIG; b++) {
       const b0 = b * 4;
       const hasVisible =
         pixelsRef.current[b0]?.style.display === "block" ||
@@ -128,7 +132,7 @@ export function AvatarPixelCard({
           const el = pixelsRef.current[i];
           if (el) el.style.display = "none";
         }
-        for (let b = 0; b < 16; b++) {
+        for (let b = 0; b < TOTAL_BIG; b++) {
           if (bigSquaresRef.current[b]) {
             bigSquaresRef.current[b].style.display = "none";
           }
@@ -139,7 +143,7 @@ export function AvatarPixelCard({
     }
 
     animFrameRef.current = requestAnimationFrame(step);
-  }, [duration, shuffleArray, TOTAL_SMALL]);
+  }, [duration, shuffleArray, TOTAL_SMALL, TOTAL_BIG]);
 
   // Handle hover on desktop
   const handleMouseEnter = () => {
@@ -215,7 +219,7 @@ export function AvatarPixelCard({
         loading="eager"
       />
 
-      {/* Pixel mosaic overlay: 4x4 big squares with delicate black borders, each containing 2x2 white small squares */}
+      {/* Pixel mosaic overlay: big squares with delicate black borders, each containing 2x2 white small squares */}
       <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
         {bigSquares.map((big) => (
           <div
@@ -226,8 +230,8 @@ export function AvatarPixelCard({
             style={{
               top: big.top,
               left: big.left,
-              width: "25%",
-              height: "25%",
+              width: `${bigCellSize}%`,
+              height: `${bigCellSize}%`,
               display: "none",
             }}
             className={`absolute border-r-[0.5px] border-b-[0.5px] border-black/35 box-border ${
